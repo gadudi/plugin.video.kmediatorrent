@@ -7,8 +7,11 @@
 
 namespace KSchema;
 
+use KSchema\Admin\PostMetabox;
 use KSchema\Admin\SettingsPage;
+use KSchema\Admin\TermFields;
 use KSchema\Frontend\HeadInjector;
+use KSchema\Override\OverrideResolver;
 use KSchema\Rules\RuleEngine;
 use KSchema\Rules\RuleMatcher;
 use KSchema\Schema\PieceFactory;
@@ -68,14 +71,19 @@ final class Plugin {
 
 		$registry = new TypeRegistry();
 		$builder  = new SchemaBuilder( $registry );
+		$factory  = new PieceFactory();
 
-		// Automation engine: rules contribute content-level pieces.
-		( new RuleEngine( new RuleMatcher(), new PieceFactory() ) )->register();
+		// Automation engine (priority 10) then overrides (priority 20) both
+		// contribute to the shared kschema/select_pieces filter.
+		( new RuleEngine( new RuleMatcher(), $factory ) )->register();
+		( new OverrideResolver( $factory ) )->register();
 
 		( new HeadInjector( $builder ) )->register();
 
 		if ( is_admin() ) {
 			( new SettingsPage( $registry ) )->register();
+			( new PostMetabox( $registry ) )->register();
+			( new TermFields( $registry ) )->register();
 		}
 
 		/**

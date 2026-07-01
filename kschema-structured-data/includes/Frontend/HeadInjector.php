@@ -54,12 +54,13 @@ class HeadInjector {
 	 * @return void
 	 */
 	public function render() {
-		if ( ! $this->should_output() ) {
+		$context = Context::for_current_request();
+
+		if ( ! $this->should_output( $context ) ) {
 			return;
 		}
 
-		$context = Context::for_current_request();
-		$json    = $this->get_json( $context );
+		$json = $this->get_json( $context );
 
 		if ( '' === $json ) {
 			return;
@@ -73,9 +74,10 @@ class HeadInjector {
 	/**
 	 * Whether output is enabled for this request.
 	 *
+	 * @param Context $context Request context.
 	 * @return bool
 	 */
-	private function should_output() {
+	private function should_output( Context $context ) {
 		$settings = get_option( 'kschema_settings', array() );
 		$enabled  = ! isset( $settings['output_enabled'] ) || $settings['output_enabled'];
 
@@ -86,9 +88,10 @@ class HeadInjector {
 		/**
 		 * Filter whether the JSON-LD block should be output on this request.
 		 *
-		 * @param bool $enabled Whether to output.
+		 * @param bool    $enabled Whether to output.
+		 * @param Context $context Request context.
 		 */
-		return (bool) apply_filters( 'kschema/should_output', $enabled );
+		return (bool) apply_filters( 'kschema/should_output', $enabled, $context );
 	}
 
 	/**

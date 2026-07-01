@@ -8,6 +8,7 @@
 namespace KSchema\Admin;
 
 use KSchema\Schema\TypeRegistry;
+use KSchema\Support\Types;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -266,15 +267,8 @@ class SettingsPage {
 	 * @return void
 	 */
 	private function render_type_options( $current ) {
-		$types = array_keys( $this->registry->all() );
-
-		// Common types that don't yet have a dedicated piece are still
-		// selectable and rendered via GenericPiece.
-		$extra = array( 'WebPage', 'FAQPage', 'Product', 'Event', 'Recipe', 'LocalBusiness', 'BreadcrumbList', 'Person', 'CollectionPage' );
-		$types = array_values( array_unique( array_merge( $types, $extra ) ) );
-		sort( $types );
-
-		foreach ( $types as $type ) {
+		// Types without a dedicated piece are still selectable (GenericPiece).
+		foreach ( Types::choices( $this->registry ) as $type ) {
 			printf(
 				'<option value="%s" %s>%s</option>',
 				esc_attr( $type ),
