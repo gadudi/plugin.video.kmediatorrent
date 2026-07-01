@@ -7,7 +7,6 @@
 
 namespace KSchema\Schema;
 
-use KSchema\Schema\Piece\Article;
 use KSchema\Schema\Piece\Organization;
 use KSchema\Schema\Piece\WebSite;
 
@@ -17,9 +16,9 @@ defined( 'ABSPATH' ) || exit;
  * Orchestrates piece selection for the current context and returns the
  * assembled document.
  *
- * Phase 1 uses a sensible built-in default selection (site nodes always,
- * Article on singular posts). Phase 2 replaces the selection step with the
- * RuleEngine + OverrideResolver output — the assembly stays identical.
+ * Site-level nodes (Organization, WebSite) are always emitted. Content
+ * pieces (Article, Product, ...) are contributed by the RuleEngine via the
+ * kschema/select_pieces filter, then adjusted by per-object overrides.
  */
 class SchemaBuilder {
 
@@ -66,10 +65,6 @@ class SchemaBuilder {
 			new Organization(),
 			new WebSite(),
 		);
-
-		if ( 'post' === $context->object_type() && $context->post() ) {
-			$pieces[] = new Article();
-		}
 
 		/**
 		 * Filter the pieces selected for a request.

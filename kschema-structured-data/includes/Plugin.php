@@ -7,7 +7,11 @@
 
 namespace KSchema;
 
+use KSchema\Admin\SettingsPage;
 use KSchema\Frontend\HeadInjector;
+use KSchema\Rules\RuleEngine;
+use KSchema\Rules\RuleMatcher;
+use KSchema\Schema\PieceFactory;
 use KSchema\Schema\SchemaBuilder;
 use KSchema\Schema\TypeRegistry;
 
@@ -65,7 +69,14 @@ final class Plugin {
 		$registry = new TypeRegistry();
 		$builder  = new SchemaBuilder( $registry );
 
+		// Automation engine: rules contribute content-level pieces.
+		( new RuleEngine( new RuleMatcher(), new PieceFactory() ) )->register();
+
 		( new HeadInjector( $builder ) )->register();
+
+		if ( is_admin() ) {
+			( new SettingsPage( $registry ) )->register();
+		}
 
 		/**
 		 * Fires after the plugin has booted its core subsystems.

@@ -68,7 +68,29 @@ class Activator {
 		}
 
 		if ( false === get_option( self::RULES_OPTION, false ) ) {
-			add_option( self::RULES_OPTION, array() );
+			add_option(
+				self::RULES_OPTION,
+				array(
+					array(
+						'id'          => 'default_post_article',
+						'label'       => 'Posts as Article',
+						'target_type' => 'post_type',
+						'target_name' => 'post',
+						'schema_type' => 'Article',
+						'priority'    => 10,
+						'enabled'     => true,
+					),
+					array(
+						'id'          => 'default_page_webpage',
+						'label'       => 'Pages as WebPage',
+						'target_type' => 'post_type',
+						'target_name' => 'page',
+						'schema_type' => 'WebPage',
+						'priority'    => 10,
+						'enabled'     => true,
+					),
+				)
+			);
 		}
 
 		if ( false === get_option( self::PROFILES_OPTION, false ) ) {
