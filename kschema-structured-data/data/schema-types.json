@@ -1,0 +1,43 @@
+{
+	"Article": {
+		"label": "Article",
+		"docs": "https://schema.org/Article",
+		"context_hint": "post",
+		"required": [ "headline" ],
+		"properties": {
+			"headline": { "label": "Headline", "type": "text" },
+			"description": { "label": "Description", "type": "text" },
+			"image": { "label": "Image", "type": "image" },
+			"datePublished": { "label": "Date published", "type": "datetime" },
+			"dateModified": { "label": "Date modified", "type": "datetime" },
+			"author": { "label": "Author", "type": "reference" },
+			"publisher": { "label": "Publisher", "type": "reference" },
+			"mainEntityOfPage": { "label": "Main entity of page", "type": "url" }
+		}
+	},
+	"WebSite": {
+		"label": "WebSite",
+		"docs": "https://schema.org/WebSite",
+		"context_hint": "site",
+		"required": [ "name", "url" ],
+		"properties": {
+			"name": { "label": "Name", "type": "text" },
+			"url": { "label": "URL", "type": "url" },
+			"description": { "label": "Description", "type": "text" },
+			"publisher": { "label": "Publisher", "type": "reference" }
+		}
+	},
+	"Organization": {
+		"label": "Organization",
+		"docs": "https://schema.org/Organization",
+		"context_hint": "site",
+		"required": [ "name" ],
+		"properties": {
+			"name": { "label": "Name", "type": "text" },
+			"url": { "label": "URL", "type": "url" },
+			"logo": { "label": "Logo", "type": "image" },
+			"description": { "label": "Description", "type": "text" },
+			"sameAs": { "label": "Same as (social profiles)", "type": "url_list" }
+		}
+	}
+}
