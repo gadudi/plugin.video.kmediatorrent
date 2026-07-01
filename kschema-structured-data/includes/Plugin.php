@@ -11,6 +11,8 @@ use KSchema\Admin\PostMetabox;
 use KSchema\Admin\SettingsPage;
 use KSchema\Admin\TermFields;
 use KSchema\Frontend\HeadInjector;
+use KSchema\Integration\ElementorBridge;
+use KSchema\Integration\SeoPluginBridge;
 use KSchema\Override\OverrideResolver;
 use KSchema\Rules\RuleEngine;
 use KSchema\Rules\RuleMatcher;
@@ -77,6 +79,10 @@ final class Plugin {
 		// contribute to the shared kschema/select_pieces filter.
 		( new RuleEngine( new RuleMatcher(), $factory ) )->register();
 		( new OverrideResolver( $factory ) )->register();
+
+		// Integrations: reconcile with SEO plugins and stay Elementor-safe.
+		( new SeoPluginBridge() )->register();
+		( new ElementorBridge() )->register();
 
 		( new HeadInjector( $builder ) )->register();
 
